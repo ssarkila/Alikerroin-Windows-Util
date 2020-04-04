@@ -3,7 +3,7 @@
 //   Alikerroin, all rights reserved.
 // </copyright>
 // <summary>
-//   The common constant definitions for the Flag detection.
+//   The common constant definitions.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

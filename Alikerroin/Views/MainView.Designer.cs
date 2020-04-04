@@ -43,7 +43,6 @@
             this._numericUpDownKellyDivider = new System.Windows.Forms.NumericUpDown();
             this._labelPercentageKelly = new System.Windows.Forms.Label();
             this._groupBoxKelly = new System.Windows.Forms.GroupBox();
-            this._checkBoxBetfair = new System.Windows.Forms.CheckBox();
             this._textBoxBet1 = new System.Windows.Forms.TextBox();
             this._labelBet1 = new System.Windows.Forms.Label();
             this._groupBoxUnits = new System.Windows.Forms.GroupBox();
@@ -93,6 +92,7 @@
             this._numericUpDownOdds1X2X = new System.Windows.Forms.NumericUpDown();
             this._numericUpDownOdds1X21 = new System.Windows.Forms.NumericUpDown();
             this._labelProbabilities1x2 = new System.Windows.Forms.Label();
+            this._checkBoxUseBetfair = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this._numericUpDownOdds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._numericUpDownProbability)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._numericUpDownOddsLimit)).BeginInit();
@@ -309,7 +309,7 @@
             // 
             // _groupBoxKelly
             // 
-            this._groupBoxKelly.Controls.Add(this._checkBoxBetfair);
+            this._groupBoxKelly.Controls.Add(this._checkBoxUseBetfair);
             this._groupBoxKelly.Controls.Add(this._textBoxBet1);
             this._groupBoxKelly.Controls.Add(this._labelBet1);
             this._groupBoxKelly.Controls.Add(this._labelOdds);
@@ -331,17 +331,6 @@
             this._groupBoxKelly.TabIndex = 17;
             this._groupBoxKelly.TabStop = false;
             this._groupBoxKelly.Text = "Kelly";
-            // 
-            // _checkBoxBetfair
-            // 
-            this._checkBoxBetfair.AutoSize = true;
-            this._checkBoxBetfair.Location = new System.Drawing.Point(19, 121);
-            this._checkBoxBetfair.Name = "_checkBoxBetfair";
-            this._checkBoxBetfair.Size = new System.Drawing.Size(56, 17);
-            this._checkBoxBetfair.TabIndex = 19;
-            this._checkBoxBetfair.Text = "Betfair";
-            this._checkBoxBetfair.UseVisualStyleBackColor = true;
-            this._checkBoxBetfair.CheckedChanged += new System.EventHandler(this._checkBoxBetfair_CheckedChanged);
             // 
             // _textBoxBet1
             // 
@@ -1091,6 +1080,17 @@
             this._labelProbabilities1x2.TabIndex = 12;
             this._labelProbabilities1x2.Text = "Todennäköisyydet 1X2:";
             // 
+            // _checkBoxUseBetfair
+            // 
+            this._checkBoxUseBetfair.AutoSize = true;
+            this._checkBoxUseBetfair.Location = new System.Drawing.Point(19, 120);
+            this._checkBoxUseBetfair.Name = "_checkBoxUseBetfair";
+            this._checkBoxUseBetfair.Size = new System.Drawing.Size(56, 17);
+            this._checkBoxUseBetfair.TabIndex = 19;
+            this._checkBoxUseBetfair.Text = "Betfair";
+            this._checkBoxUseBetfair.UseVisualStyleBackColor = true;
+            this._checkBoxUseBetfair.CheckedChanged += new System.EventHandler(this._checkBoxUseBetfair_CheckedChanged);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1160,7 +1160,6 @@
         private System.Windows.Forms.Label _labelBet2;
         private System.Windows.Forms.Label _labelMaxPartOfBankroll;
         private System.Windows.Forms.NumericUpDown _numericUpDownMaxPartOfBankroll;
-        private System.Windows.Forms.CheckBox _checkBoxBetfair;
         private System.Windows.Forms.Label _labelMaxUnits;
         private System.Windows.Forms.NumericUpDown _numericUpDownMaxUnits;
         private System.Windows.Forms.Label _labelUnits;
@@ -1200,6 +1199,7 @@
         private System.Windows.Forms.TextBox _textBoxProbability1X2X;
         private System.Windows.Forms.TextBox _textBoxProbability1X21;
         private System.Windows.Forms.Label _labelCalculateReturnPercentage1X2;
+        private System.Windows.Forms.CheckBox _checkBoxUseBetfair;
     }
 }
 

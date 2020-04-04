@@ -8,7 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using Alikerroin.Models.Settings;
+using System.Windows.Forms.VisualStyles;
 
 namespace Alikerroin.Views
 {
@@ -16,6 +16,10 @@ namespace Alikerroin.Views
     using System.Drawing;
     using System.Globalization;
     using System.Windows.Forms;
+
+    using Models.Settings;
+
+    using NLog;
 
     public enum ReturnPercentageUsage
     {
@@ -30,6 +34,10 @@ namespace Alikerroin.Views
 
     public partial class MainView : Form, IMainView
     {
+        /// <summary>The logger object.</summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>Variables to handle the main view.</summary>
         private bool _isUpdating;
         private decimal _odds;
         private decimal _oddsLimit;
@@ -55,14 +63,15 @@ namespace Alikerroin.Views
         private decimal _calculatedReturnPercentage12;
         private decimal _calculatedReturnPercentage1X2;
 
+        /// <summary>Default constructor.</summary>
         public MainView()
         {
             InitializeComponent();
         }
 
+        /// <summary>Displays the main view.</summary>
         public void Display()
         {
-            InitializeComponent();
             string version = Application.ProductVersion;
             string restrictedVersion = version.Replace(".0", string.Empty);
             base.Text = $@"Alikerroin util {restrictedVersion}";
@@ -81,6 +90,7 @@ namespace Alikerroin.Views
             Application.Run(this);
         }
 
+        /// <summary>Load settings from the settings file.</summary>
         private void LoadSettings()
         {
             try
@@ -89,7 +99,7 @@ namespace Alikerroin.Views
                 _oddsLimit = (decimal)SettingsFactory.Setup.OddsLimit;
                 _probability = (decimal)SettingsFactory.Setup.Probability;
                 _kellyDivider = SettingsFactory.Setup.KellyDivider;
-                _checkBoxBetfair.Checked = SettingsFactory.Setup.IsBetfair;
+                _checkBoxUseBetfair.Checked = SettingsFactory.Setup.IsBetfair;
                 _bankroll = (decimal)SettingsFactory.Setup.Bankroll;
                 _maxPartOfBankroll = (decimal)SettingsFactory.Setup.MaxPartOfBankroll;
                 _units = (decimal)SettingsFactory.Setup.Units;
@@ -101,10 +111,12 @@ namespace Alikerroin.Views
             }
             catch (Exception e)
             {
-                MessageBox.Show($@"Failed to load settings! {Environment.NewLine} {Environment.NewLine} {e.Message}", @"Alikerroin");
+                Logger.Error(e, @"Failed to load settings.");
+                MessageBox.Show($@"Failed to load settings. {Environment.NewLine} {Environment.NewLine} {e.Message}", @"Alikerroin");
             }
         }
 
+        /// <summary>Save the settings.</summary>
         private void SaveSettings()
         {
 
@@ -112,7 +124,7 @@ namespace Alikerroin.Views
             SettingsFactory.Setup.OddsLimit = (double)_numericUpDownOddsLimit.Value;
             SettingsFactory.Setup.Probability = (double)_numericUpDownProbability.Value;
             SettingsFactory.Setup.KellyDivider = (int)_numericUpDownKellyDivider.Value;
-            SettingsFactory.Setup.IsBetfair = _checkBoxBetfair.Checked;
+            SettingsFactory.Setup.IsBetfair = _checkBoxUseBetfair.Checked;
             SettingsFactory.Setup.Bankroll = (double)_numericUpDownBankroll.Value;
             SettingsFactory.Setup.MaxPartOfBankroll = (double)_numericUpDownMaxPartOfBankroll.Value;
             SettingsFactory.Setup.Units = (double)_numericUpDownUnits.Value;
@@ -124,6 +136,8 @@ namespace Alikerroin.Views
             SettingsFactory.SaveSettings();
         }
 
+
+        /// <summary>Set settings values to UI.</summary>
         private void SetValuesToUi()
         {
             _numericUpDownOdds.Value = _odds;
@@ -137,13 +151,15 @@ namespace Alikerroin.Views
             _numericUpDownReturnPercentage12.Value = _returnPercentage12;
         }
 
+        /// <summary>Calculate bet result.</summary>
         private void CalculateBetResult()
         {
-            if (_checkBoxBetfair.Checked)
+            if (_checkBoxUseBetfair.Checked)
             {
-                double betfairReducer = 0.98;
-                _textBoxExpectedValue.Text = Math.Round((((double)_probability / 100.0) * ((double)_odds * betfairReducer)), 3).ToString(CultureInfo.InvariantCulture);
-                double kelly = (100.0 * ((((double)_probability / 100.0) * (double)_odds * betfairReducer - 1) / ((double)_odds * betfairReducer - 1) / (double)_kellyDivider));
+                double betfairCommission = 2.0;
+                double netOdds = ((double)_odds - 1) * (1 - (betfairCommission / 100)) + 1;
+                _textBoxExpectedValue.Text = Math.Round((((double)_probability / 100.0) * netOdds), 3).ToString(CultureInfo.InvariantCulture);
+                double kelly = (100.0 * ((((double)_probability / 100.0) * netOdds - 1) / (netOdds - 1) / (double)_kellyDivider));
                 _textBoxKelly.Text = Math.Round(kelly, 2).ToString(CultureInfo.InvariantCulture);
                 _textBoxBet1.Text = Math.Round(((kelly / 100.0) * (double)_bankroll), 2).ToString(CultureInfo.InvariantCulture);
             }
@@ -551,11 +567,6 @@ namespace Alikerroin.Views
             }
         }
 
-        private void _checkBoxBetfair_CheckedChanged(object sender, EventArgs e)
-        {
-            CalculateBetResult();
-        }
-
         private void _checkBoxReturnPercentage_CheckedChanged(object sender, EventArgs e)
         {
             if (!_isUpdating)
@@ -688,6 +699,11 @@ namespace Alikerroin.Views
                 Update1X2();
                 _isUpdating = false;
             }
+        }
+
+        private void _checkBoxUseBetfair_CheckedChanged(object sender, EventArgs e)
+        {
+            CalculateBetResult();
         }
     }
 }
