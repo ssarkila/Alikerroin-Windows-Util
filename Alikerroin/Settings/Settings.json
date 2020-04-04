@@ -1,0 +1,15 @@
+{
+
+  "Odds": 2.0,
+  "OddsLimit": 2.0,
+  "Probability": 50.0,
+  "KellyDivider": 4,
+  "IsBetfair": false,
+  "Bankroll": 1000.0,
+  "MaxPartOfBankroll": 3.0,
+  "Units": 5.0,
+  "MaxUnits": 10.0,
+  "IsReturnPercentage": false,
+  "ReturnPercentage": 98.0,
+  "IsCalculateReturnPercentage": false
+}
